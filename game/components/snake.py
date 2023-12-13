@@ -1,5 +1,4 @@
 import random
-from tkinter import messagebox
 
 from utils.config import Config
 

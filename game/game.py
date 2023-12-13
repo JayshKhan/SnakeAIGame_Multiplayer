@@ -1,8 +1,8 @@
-from .components.obstacle import get_obstacles
-from .components.snake import Snake
-from .components.food import Food
 from ui.base import BaseLayout, tk
 from utils.config import Config
+from .components.food import Food
+from .components.obstacle import get_obstacles
+from .components.snake import Snake
 
 
 class Game(BaseLayout):

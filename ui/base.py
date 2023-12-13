@@ -1,6 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
-import random
+
 from utils.config import Config
 
 

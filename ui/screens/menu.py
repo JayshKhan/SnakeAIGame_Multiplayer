@@ -1,7 +1,8 @@
-from game.game import Game
-from ui.base import BaseLayout
 import tkinter as tk
 from tkinter import messagebox
+
+from game.game import Game
+from ui.base import BaseLayout
 from utils.config import Config
 
 

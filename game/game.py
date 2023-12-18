@@ -21,21 +21,22 @@ class Game(BaseLayout):
     def set_snakes(self):
         if self.no_of_snakes > 1:
             # first is human
-            self.snakes.append(Snake())
+            self.snakes.append(Snake(canvas=self.canvas, food=self.food))
             remaining = self.no_of_snakes - 1
             for i in range(remaining):
-                self.snakes.append(Snake("snake" + str(i + 1), "random", Config.OTHER_SNAKE_COLORS[i + 1]))
+                self.snakes.append(Snake("snake" + str(i + 1), "random", Config.OTHER_SNAKE_COLORS[i + 1],canvas=self.canvas, food=self.food))
 
         else:
-            self.snakes.append(Snake())
+            self.snakes.append(Snake(canvas=self.canvas, food=self.food))
 
     def update(self):
         food_coords = self.food.get_food_coords()
         for snake in self.snakes:
             snake.move()
             head = snake.get_snake()[0]
-            snake.paint_snake(self.canvas)
+            snake.paint_snake()
             if snake.get_driver() == "human":
+                pass
                 self.check_game_over(head)
             if head[0] == food_coords[0] and head[1] == food_coords[1]:
                 snake.get_snake().append((0, 0))

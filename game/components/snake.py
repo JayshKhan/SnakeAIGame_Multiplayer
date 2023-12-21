@@ -1,33 +1,45 @@
 from utils.config import Config
-from ..algorithms.a_star import AStar
+from ..algorithms.a_star import a_star
+
 from ..algorithms.random import Random
 
 
+def set_name(driver):
+    if driver == "human":
+        return "snake"
+    elif driver == "astar":
+        return "astar"
+    elif driver == "random":
+        return "random"
+    else:
+        return "others"
+
+
 class Snake:
-    def __init__(self, name="default", driver="human", color=Config.DEFAULT_SNAKE_COLOR, canvas=None, food=None):
+    def __init__(self, driver="human", color=Config.DEFAULT_SNAKE_COLOR, canvas=None, food=None):
         self.snake = [(100, 100), (90, 100), (80, 100)]
         self.direction = "Right"
-        self.name = name
+        self.name = set_name(driver)
         self.color = color
         self.canvas = canvas
         self.food = food
         self.eaten = True
         self.driver = driver  # human or astar, etc.
-
+        self.score = 0
 
     def move(self):
         if self.driver == "human":
             pass
         elif self.driver == "astar":
-            astar = AStar(self.snake, self.food)
-            new_direction = astar.get_next_direction()
+            # astar = AStar(self.snake, self.food)
+            new_direction = a_star(self.snake[0], self.food.get_food_coords(), [(0, 0)])
             if new_direction:
+                print(f"directions from astar: {new_direction}")
                 self.direction = new_direction
         elif self.driver == "random":
             random_driver = Random()
             self.direction = random_driver.move(self.food.get_food_coords(), self.snake)
             print(f"directions from snake: {self.direction}")
-
 
         new_head = None
         head = self.snake[0]
@@ -64,3 +76,9 @@ class Snake:
 
     def set_direction(self, direction):
         self.direction = direction
+
+    def get_score(self):
+        return self.score
+
+    def set_score(self, score):
+        self.score = score

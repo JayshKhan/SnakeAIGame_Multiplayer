@@ -1,6 +1,6 @@
-from utils.config import Config
-
-
+# from utils.config import Config
+#
+#
 class AStar:
     def __init__(self, snake, food):
         # TODO: Obstacles
@@ -23,8 +23,35 @@ class AStar:
             self.obstacles.append(self.canvas.coords(obstacle))
 
     def get_path(self):
-        # TODO: get path Using AStar Algo with (x,y) coordinates
-        pass
+        self.open_set.append(self.snake_coords[0])
+        self.g_score[self.snake_coords[0]] = 0
+        self.f_score[self.snake_coords[0]] = self.heuristic(self.snake_coords[0])
+
+        while len(self.open_set) > 0:
+            current = self.get_lowest_f_score()
+            if current == self.food_coords:
+                self.path_found = True
+                return self.reconstruct_path(current)
+
+            self.open_set.remove(current)
+            self.closed_set.append(current)
+
+            for neighbor in self.get_neighbors(current):
+                if neighbor in self.closed_set:
+                    continue
+
+                tentative_g_score = self.g_score[current] + 1
+
+                if neighbor not in self.open_set:
+                    self.open_set.append(neighbor)
+                elif tentative_g_score >= self.g_score[neighbor]:
+                    continue
+
+                self.came_from[neighbor] = current
+                self.g_score[neighbor] = tentative_g_score
+                self.f_score[neighbor] = self.g_score[neighbor] + self.heuristic(neighbor)
+
+        return None
 
     def heuristic(self, param):
         pass
@@ -40,3 +67,5 @@ class AStar:
 
     def get_next_direction(self):
         pass
+
+

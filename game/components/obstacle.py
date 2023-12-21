@@ -9,7 +9,7 @@ def get_obstacles(canvas):
         # check if the obstacle is not on the food
         food = canvas.gettags("food")
         food_coords = canvas.coords(food[0])
-        if x == food_coords[0] and y == food_coords[1]:
+        if x == food_coords[0] and y == food_coords[1] or x+20 == food_coords[0] and y+20 == food_coords[1]:
             continue
         obstacle.append(canvas.create_rectangle(x, y, x + 20, y + 20, fill="blue", tags="obstacle"))
 

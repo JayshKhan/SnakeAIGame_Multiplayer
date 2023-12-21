@@ -1,4 +1,5 @@
 from ui.base import BaseLayout, tk
+
 from utils.config import Config
 from .components.food import Food
 from .components.obstacle import get_obstacles
@@ -24,7 +25,8 @@ class Game(BaseLayout):
             self.snakes.append(Snake(canvas=self.canvas, food=self.food))
             remaining = self.no_of_snakes - 1
             for i in range(remaining):
-                self.snakes.append(Snake("snake" + str(i + 1), "random", Config.OTHER_SNAKE_COLORS[i + 1],canvas=self.canvas, food=self.food))
+                self.snakes.append(
+                    Snake(driver="astar", color=Config.OTHER_SNAKE_COLORS[i + 1], canvas=self.canvas, food=self.food))
 
         else:
             self.snakes.append(Snake(canvas=self.canvas, food=self.food))
@@ -32,6 +34,7 @@ class Game(BaseLayout):
     def update(self):
         food_coords = self.food.get_food_coords()
         for snake in self.snakes:
+            print(snake.get_snake(),food_coords,self.obstacles)
             snake.move()
             head = snake.get_snake()[0]
             snake.paint_snake()
@@ -42,6 +45,7 @@ class Game(BaseLayout):
                 snake.get_snake().append((0, 0))
                 self.canvas.delete("food")
                 self.food.paint(self.canvas)
+                snake.set_score(snake.get_score() + 1)
 
         self.master.after(200, self.update)
 
@@ -60,13 +64,13 @@ class Game(BaseLayout):
             self.game_over()
             return
 
-        # check if the snake hits itself
+        # # check if the snake hits itself
         for segment in self.snakes[0].get_snake()[1:]:
             if head[0] == segment[0] and head[1] == segment[1]:
                 self.game_over()
                 return
-
-        # check if the snake hits the obstacle
+        #
+        # # check if the snake hits the obstacle
         for obstacle in self.obstacles:
             obstacle_coords = self.canvas.coords(obstacle)
             if head[0] == obstacle_coords[0] and head[1] == obstacle_coords[1]:

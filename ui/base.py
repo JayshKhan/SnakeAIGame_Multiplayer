@@ -15,9 +15,6 @@ class BaseLayout:
                                 bg=Config.BACKGROUND_COLOR,
                                 width=Config.SCREEN_WIDTH,
                                 height=Config.SCREEN_HEIGHT)
+
         self.canvas.pack()
 
-    def change_screen_size(self, size):
-        self.master.geometry(size)
-        self.canvas.config(width=size.split("x")[0], height=size.split("x")[1])
-        self.master.update()

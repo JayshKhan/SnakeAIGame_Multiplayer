@@ -34,7 +34,7 @@ class Game(BaseLayout):
     def update(self):
         food_coords = self.food.get_food_coords()
         for snake in self.snakes:
-            print(snake.get_snake(),food_coords,self.obstacles)
+            # print(snake.get_snake(),food_coords,self.obstacles)
             snake.move()
             head = snake.get_snake()[0]
             snake.paint_snake()

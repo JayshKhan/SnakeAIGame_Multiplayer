@@ -31,13 +31,13 @@ class Snake:
         if self.driver == "human":
             pass
         elif self.driver == "astar":
-            astar = AStar(self.snake[0], self.food.get_food_coords())
+            astar = AStar(self.snake, self.food.get_food_coords())
             self.direction = astar.get_next_direction()
-            print(f"directions from snake: {self.direction}")
+            # print(f"directions from snake: {self.direction}")
         elif self.driver == "random":
             random_driver = Random()
             self.direction = random_driver.move(self.food.get_food_coords(), self.snake)
-            print(f"directions from snake: {self.direction}")
+            # print(f"directions from snake: {self.direction}")
 
         new_head = None
         head = self.snake[0]

@@ -1,9 +1,10 @@
 class AStar:
-    def __init__(self, snake, food):
+    def __init__(self, snake, food, obstacles=None):
         # TODO: Obstacles
-        self.snake_coords = snake
+        self.snake_coords = snake[0]
+        self.snake = snake
         self.food_coords = food
-
+        self.obstacles = []
         self.path = []
         self.path_found = False
         self.path_index = 0
@@ -22,9 +23,9 @@ class AStar:
 
         while self.open_set:
             current = self.get_lowest_f_score()
-            print(f"Current: {current}")
+            # print(f"Current: {current}")
             if current == self.food_coords:
-                print("Path found!")
+                # print("Path found!")
                 self.path_found = True
                 return self.reconstruct_path(current)
 
@@ -54,12 +55,16 @@ class AStar:
     def get_neighbors(self, current):
         neighbors = []
         moves = [(0, 20), (0, -20), (20, 0), (-20, 0)]
+
         for move in moves:
             neighbor = (current[0] + move[0], current[1] + move[1])
-            if neighbor[0] < 0 or neighbor[0] > 580 or neighbor[1] < 0 or neighbor[1] > 580:
-                continue
-            neighbors.append(neighbor)
-        print(neighbors, len(neighbors))
+
+            # Check if the neighbor is within the boundaries of the game
+            if 0 <= neighbor[0] <= 580 and 0 <= neighbor[1] <= 580:
+                # Check if the neighbor is not in the entire snake's body
+                if neighbor not in self.snake:
+                    neighbors.append(neighbor)
+
         return neighbors
 
     def get_lowest_f_score(self):

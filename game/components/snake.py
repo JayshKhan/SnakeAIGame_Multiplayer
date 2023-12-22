@@ -1,5 +1,5 @@
 from utils.config import Config
-from ..algorithms.a_star import a_star
+from ..algorithms.a_star import AStar
 
 from ..algorithms.random import Random
 
@@ -31,11 +31,9 @@ class Snake:
         if self.driver == "human":
             pass
         elif self.driver == "astar":
-            # astar = AStar(self.snake, self.food)
-            new_direction = a_star(self.snake[0], self.food.get_food_coords(), [(0, 0)])
-            if new_direction:
-                print(f"directions from astar: {new_direction}")
-                self.direction = new_direction
+            astar = AStar(self.snake[0], self.food.get_food_coords())
+            self.direction = astar.get_next_direction()
+            print(f"directions from snake: {self.direction}")
         elif self.driver == "random":
             random_driver = Random()
             self.direction = random_driver.move(self.food.get_food_coords(), self.snake)

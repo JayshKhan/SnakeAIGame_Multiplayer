@@ -1,3 +1,8 @@
+import os
+import sys
+
+from customtkinter import CTk
+
 from ui.base import BaseLayout, tk
 
 from utils.config import Config
@@ -8,10 +13,11 @@ from .components.snake import Snake
 
 
 class Game(BaseLayout):
-    def __init__(self, master, no_of_snakes=1):
+    def __init__(self, master, no_of_snakes=1,ai="astar"):
         super().__init__(master)
         self.snakes = []
         self.no_of_snakes = no_of_snakes
+        self.ai_algorithm = ai
         self.food = Food(self.canvas)
         self.obstacles = get_obstacles(self.canvas)
 
@@ -27,7 +33,7 @@ class Game(BaseLayout):
             remaining = self.no_of_snakes - 1
             for i in range(remaining):
                 self.snakes.append(
-                    Snake(driver="astar", color=Config.OTHER_SNAKE_COLORS[i + 1], canvas=self.canvas, food=self.food))
+                    Snake(driver=self.ai_algorithm, color=Config.OTHER_SNAKE_COLORS[i + 1], canvas=self.canvas, food=self.food))
 
         else:
             self.snakes.append(Snake(canvas=self.canvas, food=self.food))
@@ -98,6 +104,5 @@ class Game(BaseLayout):
 
     def restart(self, event):
         self.master.destroy()
-        root = tk.Tk()
-        game = Game(root, self.no_of_snakes)
-        root.mainloop()
+        # delete everything and retart from the main.py
+        os.execl(sys.executable, sys.executable, *sys.argv)

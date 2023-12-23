@@ -78,9 +78,7 @@ class AStar:
                     if neighbor[0] == segment[0] and neighbor[1] == segment[1]:
                         remove = True
                 if remove:
-                    print(f"Removing {neighbor} from neighbors")
                     neighbors.remove(neighbor)
-                    print(f"Neighbors: {neighbors}")
 
         return neighbors
 

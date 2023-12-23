@@ -1,5 +1,6 @@
 from utils.config import Config
 from ..algorithms.a_star import AStar
+from ..algorithms.greedy import Greedy
 
 from ..algorithms.random import Random
 
@@ -26,21 +27,28 @@ class Snake:
         self.eaten = True
         self.driver = driver  # human or astar, etc.
         self.score = 0
+        self.obstacles = []
+        for obstacle in self.canvas.find_withtag("obstacle"):
+            self.obstacles.append(self.canvas.coords(obstacle))
 
     def move(self,snake=None):
         if self.driver == "human":
             pass
-        elif self.driver == "astar":
-            obstacles = []
-            for obstacle in self.canvas.find_withtag("obstacle"):
-                obstacles.append(self.canvas.coords(obstacle))
-            astar = AStar(snake, self.food.get_food_coords(), obstacles)
+        elif self.driver == "A*":
+            print("Using A*")
+            astar = AStar(snake, self.food.get_food_coords(), self.obstacles)
             self.direction = astar.get_next_direction()
             # print(f"directions from snake: {self.direction}")
-        elif self.driver == "random":
+        elif self.driver == "Random":
+            print("Using Random")
             random_driver = Random()
             self.direction = random_driver.move(self.food.get_food_coords(), self.snake)
             # print(f"directions from snake: {self.direction}")
+        elif self.driver == "Greedy":
+            print("Using Greedy")
+            greedy = Greedy(snake, self.food.get_food_coords(), self.obstacles)
+            self.direction = greedy.get_next_direction()
+
 
         new_head = None
         head = self.snake[0]

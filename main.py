@@ -1,11 +1,16 @@
 from ui.screens.menu import Menu, tk
 
+from customtkinter import *
+
 
 def main():
     # initialize main menu, Event loop
-    root = tk.Tk()
-    Menu(root)
-    root.mainloop()
+    app = CTk()
+    Menu(app)
+    app.mainloop()
+    # root = tk.Tk()
+    # Menu(root)
+    # root.mainloop()
 
 
 if __name__ == "__main__":

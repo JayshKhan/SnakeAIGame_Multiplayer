@@ -27,11 +27,14 @@ class Snake:
         self.driver = driver  # human or astar, etc.
         self.score = 0
 
-    def move(self):
+    def move(self,snake=None):
         if self.driver == "human":
             pass
         elif self.driver == "astar":
-            astar = AStar(self.snake, self.food.get_food_coords())
+            obstacles = []
+            for obstacle in self.canvas.find_withtag("obstacle"):
+                obstacles.append(self.canvas.coords(obstacle))
+            astar = AStar(snake, self.food.get_food_coords(), obstacles)
             self.direction = astar.get_next_direction()
             # print(f"directions from snake: {self.direction}")
         elif self.driver == "random":

@@ -1,6 +1,11 @@
+import random
+
+
 class AStar:
     def __init__(self, snake, food, obstacles=None):
         # TODO: Obstacles
+        self.obstacles = obstacles
+        self.obstacles_coords = []
         self.snake_coords = snake[0]
         self.snake = snake
         self.food_coords = food
@@ -15,6 +20,7 @@ class AStar:
         self.f_score = {}
 
         self.path = self.get_path()
+        self.get_obstacle_coords()
 
     def get_path(self):
         self.open_set.append(self.snake_coords)
@@ -58,12 +64,23 @@ class AStar:
 
         for move in moves:
             neighbor = (current[0] + move[0], current[1] + move[1])
+            remove = False
 
             # Check if the neighbor is within the boundaries of the game
             if 0 <= neighbor[0] <= 580 and 0 <= neighbor[1] <= 580:
+                neighbors.append(neighbor)
+                # check if the neighbor is not on the obstacle
+                for obstacle in self.obstacles_coords:
+                    if neighbor[0] == obstacle[0] and neighbor[1] == obstacle[1]:
+                        remove = True
                 # Check if the neighbor is not in the entire snake's body
-                if neighbor not in self.snake:
-                    neighbors.append(neighbor)
+                for segment in self.snake:
+                    if neighbor[0] == segment[0] and neighbor[1] == segment[1]:
+                        remove = True
+                if remove:
+                    print(f"Removing {neighbor} from neighbors")
+                    neighbors.remove(neighbor)
+                    print(f"Neighbors: {neighbors}")
 
         return neighbors
 
@@ -83,6 +100,11 @@ class AStar:
             total_path.append(current)
         return total_path
 
+    def get_obstacle_coords(self):
+        for obstacle in self.obstacles:
+            self.obstacles_coords.append((obstacle[0], obstacle[1]))
+        return self.obstacles_coords
+
     def get_next_direction(self):
         if self.path_index < len(self.path):
             next_node = self.path[self.path_index]
@@ -95,4 +117,5 @@ class AStar:
                 return "Up"
             elif next_node[1] > self.snake_coords[1]:
                 return "Down"
-        return None
+        # in case the path is not found return random direction
+        return random.choice(["Right", "Left", "Up", "Down"])

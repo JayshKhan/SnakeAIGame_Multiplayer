@@ -3,6 +3,7 @@ from ui.base import BaseLayout, tk
 from utils.config import Config
 from .components.food import Food
 from .components.obstacle import get_obstacles
+from .components.score_board import ScoreBoard
 from .components.snake import Snake
 
 
@@ -14,7 +15,7 @@ class Game(BaseLayout):
         self.food = Food(self.canvas)
         self.obstacles = get_obstacles(self.canvas)
 
-        self.score = 0
+        self.score_board = ScoreBoard(no_of_snakes)
         self.set_snakes()
         self.master.bind("<KeyPress>", self.change_direction)
         self.update()
@@ -35,17 +36,21 @@ class Game(BaseLayout):
         food_coords = self.food.get_food_coords()
         for snake in self.snakes:
             # print(snake.get_snake(),food_coords,self.obstacles)
-            snake.move()
+            snake.move(snake.get_snake())
             head = snake.get_snake()[0]
             snake.paint_snake()
             if snake.get_driver() == "human":
-                pass
-                self.check_game_over(head)
+                if self.check_game_over(head):
+                    return
+
             if head[0] == food_coords[0] and head[1] == food_coords[1]:
                 snake.get_snake().append((0, 0))
                 self.canvas.delete("food")
                 self.food.paint(self.canvas)
                 snake.set_score(snake.get_score() + 1)
+        self.score_board.update_scoreboard(self.snakes[0].get_score(),
+                                           # self.snakes[1].get_score() if self.no_of_snakes > 1 else
+                                           None)
 
         self.master.after(200, self.update)
 
@@ -62,20 +67,22 @@ class Game(BaseLayout):
     def check_game_over(self, head):
         if head[0] < 0 or head[0] > Config.SCREEN_WIDTH - 20 or head[1] < 0 or head[1] > Config.SCREEN_HEIGHT - 20:
             self.game_over()
-            return
+            return True
 
         # # check if the snake hits itself
         for segment in self.snakes[0].get_snake()[1:]:
             if head[0] == segment[0] and head[1] == segment[1]:
                 self.game_over()
-                return
+                return True
         #
         # # check if the snake hits the obstacle
         for obstacle in self.obstacles:
             obstacle_coords = self.canvas.coords(obstacle)
             if head[0] == obstacle_coords[0] and head[1] == obstacle_coords[1]:
                 self.game_over()
-                return
+                return True
+
+        return False
 
     def game_over(self):
         for snake in self.snakes:
@@ -87,7 +94,7 @@ class Game(BaseLayout):
                                 Config.SCREEN_HEIGHT / 2 + 50,
                                 anchor="center", text="Press Space to Restart", font=("Arial", 20), fill="white")
         self.master.bind("<space>", self.restart)
-        return
+
 
     def restart(self, event):
         self.master.destroy()

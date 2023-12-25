@@ -1,10 +1,7 @@
 import os
 import sys
 
-from customtkinter import CTk
-
-from ui.base import BaseLayout, tk
-
+from ui.base import BaseLayout
 from utils.config import Config
 from .components.food import Food
 from .components.obstacle import get_obstacles
@@ -13,7 +10,7 @@ from .components.snake import Snake
 
 
 class Game(BaseLayout):
-    def __init__(self, master, no_of_snakes=1,ai="astar"):
+    def __init__(self, master, no_of_snakes=1, ai="astar"):
         super().__init__(master)
         self.snakes = []
         self.no_of_snakes = no_of_snakes
@@ -33,7 +30,8 @@ class Game(BaseLayout):
             remaining = self.no_of_snakes - 1
             for i in range(remaining):
                 self.snakes.append(
-                    Snake(driver=self.ai_algorithm, color=Config.OTHER_SNAKE_COLORS[i + 1], canvas=self.canvas, food=self.food))
+                    Snake(driver=self.ai_algorithm, color=Config.OTHER_SNAKE_COLORS[i + 1], canvas=self.canvas,
+                          food=self.food))
 
         else:
             self.snakes.append(Snake(canvas=self.canvas, food=self.food))
@@ -55,8 +53,7 @@ class Game(BaseLayout):
                 self.food.paint(self.canvas)
                 snake.set_score(snake.get_score() + 1)
         self.score_board.update_scoreboard(self.snakes[0].get_score(),
-                                           # self.snakes[1].get_score() if self.no_of_snakes > 1 else
-                                           None)
+                                           self.snakes[1].get_score() if self.no_of_snakes > 1 else None)
 
         self.master.after(200, self.update)
 
@@ -100,7 +97,6 @@ class Game(BaseLayout):
                                 Config.SCREEN_HEIGHT / 2 + 50,
                                 anchor="center", text="Press Space to Restart", font=("Arial", 20), fill="white")
         self.master.bind("<space>", self.restart)
-
 
     def restart(self, event):
         self.master.destroy()

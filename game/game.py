@@ -12,6 +12,7 @@ from .components.snake import Snake
 class Game(BaseLayout):
     def __init__(self, master, no_of_snakes=1, ai="astar"):
         super().__init__(master)
+
         self.snakes = []
         self.no_of_snakes = no_of_snakes
         self.ai_algorithm = ai
@@ -21,8 +22,21 @@ class Game(BaseLayout):
         self.score_board = ScoreBoard(no_of_snakes)
         self.set_snakes()
         self.master.bind("<KeyPress>", self.change_direction)
+        self.game_time = 10
+        self.update_time()
         self.update()
 
+    def update_time(self):
+        if self.game_time > 0:
+            self.game_time -= 1
+            self.canvas.delete("time")
+            self.canvas.create_text(0+50,
+                                    0,
+                                    anchor="n", text=f"Time: {self.game_time}", font=("Arial", 12),
+                                    fill="white", tag="time")
+            self.master.after(1000, self.update_time)
+        else:
+            self.game_over()
     def set_snakes(self):
         if self.no_of_snakes > 1:
             # first is human
@@ -88,13 +102,42 @@ class Game(BaseLayout):
         return False
 
     def game_over(self):
+        if self.no_of_snakes > 1:
+            score1 = self.snakes[0].get_score()
+            score2 = self.snakes[1].get_score()
+        else:
+            score1 = self.snakes[0].get_score()
+            score2 = None
         for snake in self.snakes:
             self.snakes.remove(snake)
+
+        self.canvas.delete("time")
+        self.game_time=0
         self.canvas.create_text(Config.SCREEN_WIDTH / 2,
                                 Config.SCREEN_HEIGHT / 2,
                                 anchor="center", text="Game Over", font=("Arial", 30), fill="white")
+        # declare the winner
+        if score2 is not None:
+            if score1 > score2:
+                self.canvas.create_text(Config.SCREEN_WIDTH / 2,
+                                        Config.SCREEN_HEIGHT / 2 + 50,
+                                        anchor="center", text="Player 1 Wins", font=("Arial", 20), fill="white")
+            elif score1 < score2:
+                self.canvas.create_text(Config.SCREEN_WIDTH / 2,
+                                        Config.SCREEN_HEIGHT / 2 + 50,
+                                        anchor="center", text="Player 2 Wins", font=("Arial", 20), fill="white")
+            else:
+                self.canvas.create_text(Config.SCREEN_WIDTH / 2,
+                                        Config.SCREEN_HEIGHT / 2 + 50,
+                                        anchor="center", text="Draw", font=("Arial", 20), fill="white")
+
+        else:
+            self.canvas.create_text(Config.SCREEN_WIDTH / 2,
+                                    Config.SCREEN_HEIGHT / 2 + 50,
+                                    anchor="center", text="You Lost with Score: " + str(score1), font=("Arial", 20), fill="white")
+
         self.canvas.create_text(Config.SCREEN_WIDTH / 2,
-                                Config.SCREEN_HEIGHT / 2 + 50,
+                                Config.SCREEN_HEIGHT / 2 + 100,
                                 anchor="center", text="Press Space to Restart", font=("Arial", 20), fill="white")
         self.master.bind("<space>", self.restart)
 

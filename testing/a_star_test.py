@@ -1,11 +1,12 @@
 import random
 
 
-class AStar:
+class AStar_test:
     def __init__(self, snake, food, obstacles=None):
-        # TODO: Obstacles
         self.obstacles = obstacles
         self.obstacles_coords = []
+        self.get_obstacle_coords()
+
         self.snake_coords = snake[0]
         self.snake = snake
         self.food_coords = food
@@ -20,7 +21,6 @@ class AStar:
         self.f_score = {}
 
         self.path = self.get_path()
-        self.get_obstacle_coords()
 
     def get_path(self):
         self.open_set.append(self.snake_coords)
@@ -29,9 +29,9 @@ class AStar:
 
         while self.open_set:
             current = self.get_lowest_f_score()
-            # print(f"Current: {current}")
+            print(f"Current: {current}")
             if current == self.food_coords:
-                # print("Path found!")
+                print("Path found!")
                 self.path_found = True
                 return self.reconstruct_path(current)
 
@@ -56,9 +56,13 @@ class AStar:
         return []
 
     def heuristic(self, snake_coords):
-        return abs(snake_coords[0] - self.food_coords[0]) + abs(snake_coords[1] - self.food_coords[1])
+        return (abs(snake_coords[0] -
+                    self.food_coords[0]) +
+                abs(snake_coords[1] -
+                    self.food_coords[1]))
 
     def get_neighbors(self, current):
+        print("getting neighbours")
         neighbors = []
         moves = [(0, 20), (0, -20), (20, 0), (-20, 0)]
 
@@ -68,9 +72,12 @@ class AStar:
 
             # Check if the neighbor is within the boundaries of the game
             if 0 <= neighbor[0] <= 580 and 0 <= neighbor[1] <= 580:
+                print(f"Neighbor: {neighbor} :", end="-")
                 neighbors.append(neighbor)
                 # check if the neighbor is not on the obstacle
+                print(f"checking {neighbor} with {self.obstacles_coords}", end="-")
                 for obstacle in self.obstacles_coords:
+                    print(f"checking {neighbor} with {obstacle}", end="-")
                     if neighbor[0] == obstacle[0] and neighbor[1] == obstacle[1]:
                         remove = True
                 # Check if the neighbor is not in the entire snake's body
@@ -79,7 +86,10 @@ class AStar:
                         remove = True
                 if remove:
                     neighbors.remove(neighbor)
-
+                    print("is removed")
+                else:
+                    print("is accepted")
+        print(f"neighbours {neighbors}")
         return neighbors
 
     def get_lowest_f_score(self):
@@ -96,11 +106,18 @@ class AStar:
         while current in self.came_from.keys():
             current = self.came_from[current]
             total_path.append(current)
+        # check two arrays if they have any common elements
+        if self.obstacles_coords:
+            for obstacle in self.obstacles_coords:
+                if obstacle in total_path or (obstacle[0] + 20, obstacle[1] + 20) in total_path:
+                    print("Obstacle in path")
+                    break
         return total_path
 
     def get_obstacle_coords(self):
-        for obstacle in self.obstacles:
-            self.obstacles_coords.append((obstacle[0], obstacle[1]))
+        self.obstacles_coords = self.obstacles
+        # for obstacle in self.obstacles:
+        #     self.obstacles_coords.append((obstacle[0] + 20, obstacle[1] + 20))
         return self.obstacles_coords
 
     def get_next_direction(self):
@@ -122,8 +139,8 @@ class AStar:
 if __name__ == "__main__":
     # Example usage "*" snake head, infront of it is obstacle "O" after that is food for the snake "F"
     snake_location = [(100, 100), (80, 100), (60, 100)]
-    obstacle_locations = [(100, 100)]
-    food_location = (120, 100)
+    obstacle_locations = [(140, 100)]
+    food_location = (180, 100)
 
-    astar = AStar(snake_location, food_location, obstacle_locations)
+    astar = AStar_test(snake_location, food_location, obstacle_locations)
     print(astar.get_path())

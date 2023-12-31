@@ -3,6 +3,7 @@ import random
 
 def get_obstacles(canvas):
     obstacle = []
+    obstacle_coords = []
     for i in range(10):
         x = random.randint(0, 19) * 20
         y = random.randint(0, 19) * 20
@@ -12,5 +13,6 @@ def get_obstacles(canvas):
         if x == food_coords[0] and y == food_coords[1] or x+20 == food_coords[0] and y+20 == food_coords[1]:
             continue
         obstacle.append(canvas.create_rectangle(x, y, x + 20, y + 20, fill="blue", tags="obstacle"))
+        obstacle_coords.append((x, y))
 
-    return obstacle
+    return obstacle, obstacle_coords

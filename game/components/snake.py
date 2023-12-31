@@ -17,7 +17,7 @@ def set_name(driver):
 
 
 class Snake:
-    def __init__(self, driver="human", color=Config.DEFAULT_SNAKE_COLOR, canvas=None, food=None):
+    def __init__(self, driver="human", color=Config.DEFAULT_SNAKE_COLOR, canvas=None, food=None, obstacles=None):
         self.snake = [(100, 100), (90, 100), (80, 100)]
         self.direction = "Right"
         self.name = set_name(driver)
@@ -27,39 +27,47 @@ class Snake:
         self.eaten = True
         self.driver = driver  # human or astar, etc.
         self.score = 0
-        self.obstacles = []
-        for obstacle in self.canvas.find_withtag("obstacle"):
-            self.obstacles.append(self.canvas.coords(obstacle))
+        self.obstacles = obstacles
+        # for obstacle in self.canvas.find_withtag("obstacle"):
+        #     self.obstacles.append(self.canvas.coords(obstacle))
+        self.path = []
 
-    def move(self,snake=None):
+    def move(self, snake=None, food=None):
+        new_head = None
         if self.driver == "human":
-            pass
+            head = self.snake[0]
+            if self.direction == "Right":
+                new_head = (head[0] + 20, head[1])
+            elif self.direction == "Left":
+                new_head = (head[0] - 20, head[1])
+            elif self.direction == "Up":
+                new_head = (head[0], head[1] - 20)
+            elif self.direction == "Down":
+                new_head = (head[0], head[1] + 20)
         elif self.driver == "A*":
-            print("Using A*")
-            astar = AStar(snake, self.food.get_food_coords(), self.obstacles)
-            self.direction = astar.get_next_direction()
-            # print(f"directions from snake: {self.direction}")
+            if self.path:
+                new_head = self.path.pop(0)
+            else:
+                print("Using A*")
+                astar = AStar(snake, food, self.obstacles)
+                path = astar.get_path()
+                self.path = path[::-1]
+                new_head = self.path.pop(0)
+                del astar
+
         elif self.driver == "Random":
             print("Using Random")
             random_driver = Random()
-            self.direction = random_driver.move(self.food.get_food_coords(), self.snake)
-            # print(f"directions from snake: {self.direction}")
+            self.direction = random_driver.move(food, self.snake)
+            del random_driver
         elif self.driver == "Greedy":
-            print("Using Greedy")
-            greedy = Greedy(snake, self.food.get_food_coords(), self.obstacles)
-            self.direction = greedy.get_next_direction()
-
-
-        new_head = None
-        head = self.snake[0]
-        if self.direction == "Right":
-            new_head = (head[0] + 20, head[1])
-        elif self.direction == "Left":
-            new_head = (head[0] - 20, head[1])
-        elif self.direction == "Up":
-            new_head = (head[0], head[1] - 20)
-        elif self.direction == "Down":
-            new_head = (head[0], head[1] + 20)
+            if self.path:
+                new_head = self.path.pop(0)
+            else:
+                print("Using Greedy")
+                greedy = Greedy(snake, food, self.obstacles)
+                self.direction = greedy.get_next_direction()
+                del greedy
 
         self.snake.insert(0, new_head)
         self.snake.pop()

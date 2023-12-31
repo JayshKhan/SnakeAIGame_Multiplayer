@@ -14,7 +14,7 @@ class Menu(BaseLayout):
         super().__init__(master)
         self.no_of_players = customtkinter.IntVar()
         self.ai_algorithm = customtkinter.StringVar()
-        self.no_of_players.set(1)
+        self.no_of_players.set(2)
         self.ai_algorithm.set("A*")
         # using config to get the height and width of the screen
         self.settings_window = None

@@ -3,9 +3,10 @@ import random
 
 class Greedy:
     def __init__(self, snake, food, obstacles=None):
-        # TODO: Obstacles
+
         self.obstacles = obstacles
         self.obstacles_coords = []
+        self.get_obstacle_coords()
         self.snake_coords = snake[0]
         self.snake = snake
         self.food_coords = food
@@ -20,7 +21,6 @@ class Greedy:
         self.f_score = {}
 
         self.path = self.get_path()
-        self.get_obstacle_coords()
 
     def get_path(self):
         self.open_set.append(self.snake_coords)
@@ -42,21 +42,20 @@ class Greedy:
                 if neighbor in self.closed_set:
                     continue
 
-                tentative_g_score = self.g_score[current] + 1
-
                 if neighbor not in self.open_set:
                     self.open_set.append(neighbor)
-                elif tentative_g_score >= self.g_score[neighbor]:
-                    continue
 
                 self.came_from[neighbor] = current
-                self.g_score[neighbor] = tentative_g_score
-                self.f_score[neighbor] = self.heuristic(neighbor) # greedy only depends on heuristic
 
-        return []
+                self.f_score[neighbor] = self.heuristic(neighbor)
+
+        return None
 
     def heuristic(self, snake_coords):
-        return abs(snake_coords[0] - self.food_coords[0]) + abs(snake_coords[1] - self.food_coords[1])
+        return (abs(snake_coords[0] -
+                    self.food_coords[0]) +
+                abs(snake_coords[1] -
+                    self.food_coords[1]))
 
     def get_neighbors(self, current):
         neighbors = []
@@ -67,7 +66,7 @@ class Greedy:
             remove = False
 
             # Check if the neighbor is within the boundaries of the game
-            if 0 <= neighbor[0] <= 580 and 0 <= neighbor[1] <= 580:
+            if 0 <= neighbor[0] <= 380 and 0 <= neighbor[1] <= 380:
                 neighbors.append(neighbor)
                 # check if the neighbor is not on the obstacle
                 for obstacle in self.obstacles_coords:
@@ -96,11 +95,18 @@ class Greedy:
         while current in self.came_from.keys():
             current = self.came_from[current]
             total_path.append(current)
+        # check two arrays if they have any common elements
+        if self.obstacles_coords:
+            for obstacle in self.obstacles_coords:
+                if obstacle in total_path or (obstacle[0] + 20, obstacle[1] + 20) in total_path:
+                    print("Obstacle in path")
+                    break
         return total_path
 
     def get_obstacle_coords(self):
-        for obstacle in self.obstacles:
-            self.obstacles_coords.append((obstacle[0], obstacle[1]))
+        self.obstacles_coords = self.obstacles
+        # for obstacle in self.obstacles:
+        #     self.obstacles_coords.append((obstacle[0] + 20, obstacle[1] + 20))
         return self.obstacles_coords
 
     def get_next_direction(self):

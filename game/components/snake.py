@@ -51,6 +51,9 @@ class Snake:
                 print("Using A*")
                 astar = AStar(snake, food, self.obstacles)
                 path = astar.get_path()
+                if path == None:
+                    print("No path found")
+                    return
                 self.path = path[::-1]
                 new_head = self.path.pop(0)
                 del astar

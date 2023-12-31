@@ -71,7 +71,7 @@ class AStar_test:
             remove = False
 
             # Check if the neighbor is within the boundaries of the game
-            if 0 <= neighbor[0] <= 580 and 0 <= neighbor[1] <= 580:
+            if 0 <= neighbor[0] <= 380 and 0 <= neighbor[1] <= 380:
                 print(f"Neighbor: {neighbor} :", end="-")
                 neighbors.append(neighbor)
                 # check if the neighbor is not on the obstacle
@@ -138,9 +138,15 @@ class AStar_test:
 
 if __name__ == "__main__":
     # Example usage "*" snake head, infront of it is obstacle "O" after that is food for the snake "F"
-    snake_location = [(100, 100), (80, 100), (60, 100)]
-    obstacle_locations = [(140, 100)]
-    food_location = (180, 100)
+    ''' Obstacle Avoid Test Data '''
+    snake_location_OA = [(100, 100), (80, 100), (60, 100)]
+    obstacle_locations_OA = [(140, 100)]
+    food_location_OA = (180, 100)
+
+    ''' Self Collision Avoid Test Data '''
+    snake_location = [(120, 100), (100, 100), (80, 100)]
+    obstacle_locations = [(0, 0)]
+    food_location = (20, 100)
 
     astar = AStar_test(snake_location, food_location, obstacle_locations)
     print(astar.get_path())

@@ -71,7 +71,7 @@ class AStar:
             remove = False
 
             # Check if the neighbor is within the boundaries of the game
-            if 0 <= neighbor[0] <= 580 and 0 <= neighbor[1] <= 580:
+            if 0 <= neighbor[0] <= 380 and 0 <= neighbor[1] <= 380:
                 neighbors.append(neighbor)
                 # check if the neighbor is not on the obstacle
                 for obstacle in self.obstacles_coords:

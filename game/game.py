@@ -104,7 +104,7 @@ class Game(BaseLayout):
         #
         # # check if the snake hits the obstacle
         for obstacle in self.obstacles:
-            obstacle_coords = self.obstacles_coords
+            obstacle_coords = self.canvas.coords(obstacle)
             if head[0] == obstacle_coords[0] and head[1] == obstacle_coords[1]:
                 print("Touched Obstacle")
                 self.game_over()

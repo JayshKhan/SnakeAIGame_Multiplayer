@@ -8,9 +8,7 @@ def main():
     app = CTk()
     Menu(app)
     app.mainloop()
-    # root = tk.Tk()
-    # Menu(root)
-    # root.mainloop()
+
 
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ class Food:
         self.paint(canvas)
 
     def randomize(self):
+        # TODO: Food should not be in The Snake Coordinates
         self.x = random.randint(0, 19) * 20
         self.y = random.randint(0, 19) * 20
 

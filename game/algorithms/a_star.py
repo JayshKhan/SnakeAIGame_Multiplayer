@@ -22,7 +22,6 @@ class AStar:
 
         self.path = self.get_path()
 
-
     def get_path(self):
         self.open_set.append(self.snake_coords)
         self.g_score[self.snake_coords] = 0

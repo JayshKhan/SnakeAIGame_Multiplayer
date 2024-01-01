@@ -1,6 +1,7 @@
 # Snake AI Game Multiplayer
 
-This project is a multiplayer version of the classic Snake game, developed in Python. It includes an AI-controlled enemy snake for an added level of competition.
+This project is a multiplayer version of the classic Snake game, developed in Python. It includes an AI-controlled enemy
+snake for an added level of competition.
 
 ## Features
 

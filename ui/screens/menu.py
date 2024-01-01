@@ -76,7 +76,7 @@ class Menu(BaseLayout):
         ai_algorithm_label.place(x=200, y=150, anchor="center")
 
         self.ai_algorithm_btn = CTkOptionMenu(self.settings_window, variable=self.ai_algorithm,
-                                                values=["A*", "Greedy", "Random"])
+                                              values=["A*", "Greedy", "Random"])
         self.ai_algorithm_btn.place(x=200, y=200, anchor="center")
 
         # save the settings

@@ -4,12 +4,12 @@ from tkinter import ttk
 
 
 class ScoreBoard(tk.Toplevel):
-    def __init__(self,no_of_snakes=1):
+    def __init__(self, no_of_snakes=1):
         super().__init__()
         self.no_of_snakes = no_of_snakes
         self.title("Score Board")
-        x= self.winfo_screenwidth()
-        y= self.winfo_screenheight()
+        x = self.winfo_screenwidth()
+        y = self.winfo_screenheight()
         self.geometry('%dx%d+%d+%d' % (280, 50, x, y))
         self.resizable(False, False)
         self.score = 0

@@ -17,7 +17,6 @@ class Food:
 
     def paint(self, canvas):
         self.randomize()
-        print(f"food_coords from food: {self.x, self.y}")
         canvas.create_rectangle(self.x, self.y, self.x + 20, self.y + 20, fill="red", tags="food")
 
     def get_food_coords(self):

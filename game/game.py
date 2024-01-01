@@ -44,7 +44,7 @@ class Game(BaseLayout):
     def set_snakes(self):
         if self.no_of_snakes > 1:
             # first is human
-            self.snakes.append(Snake(canvas=self.canvas, food=self.food,obstacles=self.obstacles_coords))
+            self.snakes.append(Snake(canvas=self.canvas, food=self.food, obstacles=self.obstacles_coords))
             remaining = self.no_of_snakes - 1
             for i in range(remaining):
                 self.snakes.append(
@@ -52,7 +52,7 @@ class Game(BaseLayout):
                           food=self.food, obstacles=self.obstacles_coords))
 
         else:
-            self.snakes.append(Snake(canvas=self.canvas, food=self.food,obstacles=self.obstacles_coords))
+            self.snakes.append(Snake(canvas=self.canvas, food=self.food, obstacles=self.obstacles_coords))
 
     def update(self):
         if not self.game_ended:
@@ -70,7 +70,7 @@ class Game(BaseLayout):
                     snake.get_snake().append((0, 0))
                     for sna in self.snakes:
                         print(f"setting path empty for {sna.get_name()}")
-                        sna.path = []
+                        sna.path_reset()
                     self.canvas.delete("food")
                     self.food.paint(self.canvas)
                     snake.set_score(snake.get_score() + 1)

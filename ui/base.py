@@ -17,4 +17,3 @@ class BaseLayout:
                                 height=Config.SCREEN_HEIGHT)
 
         self.canvas.pack()
-

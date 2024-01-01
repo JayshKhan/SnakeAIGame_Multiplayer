@@ -6,11 +6,11 @@ from ..algorithms.random import Random
 
 
 def set_name(driver):
-    if driver == "human":
+    if str.lower(driver) == "human":
         return "snake"
-    elif driver == "astar":
+    elif str.lower(driver) == "a*":
         return "astar"
-    elif driver == "random":
+    elif str.lower(driver) == "random":
         return "random"
     else:
         return "others"
@@ -31,6 +31,7 @@ class Snake:
         # for obstacle in self.canvas.find_withtag("obstacle"):
         #     self.obstacles.append(self.canvas.coords(obstacle))
         self.path = []
+        print(f"Snake {self.name} created with {self.driver} snake {self.snake}")
 
     def move(self, snake=None, food=None):
         new_head = None
@@ -44,8 +45,23 @@ class Snake:
                 new_head = (head[0], head[1] - 20)
             elif self.direction == "Down":
                 new_head = (head[0], head[1] + 20)
+        elif self.driver == "Random":
+            print("Using Random")
+            random_driver = Random()
+            self.direction = random_driver.move(food, self.snake)
+            head = self.snake[0]
+            if self.direction == "Right":
+                new_head = (head[0] + 20, head[1])
+            elif self.direction == "Left":
+                new_head = (head[0] - 20, head[1])
+            elif self.direction == "Up":
+                new_head = (head[0], head[1] - 20)
+            elif self.direction == "Down":
+                new_head = (head[0], head[1] + 20)
+            del random_driver
         elif self.driver == "A*":
-            if self.path:
+            if self.path or len(self.path) > 0:
+                print(f"Using A* with path {self.path}")
                 new_head = self.path.pop(0)
             else:
                 print("Using A*")
@@ -57,19 +73,15 @@ class Snake:
                 self.path = path[::-1]
                 new_head = self.path.pop(0)
                 del astar
-
-        elif self.driver == "Random":
-            print("Using Random")
-            random_driver = Random()
-            self.direction = random_driver.move(food, self.snake)
-            del random_driver
         elif self.driver == "Greedy":
             if self.path:
                 new_head = self.path.pop(0)
             else:
                 print("Using Greedy")
                 greedy = Greedy(snake, food, self.obstacles)
-                self.direction = greedy.get_next_direction()
+                path = greedy.get_path()
+                self.path = path[::-1]
+                new_head = self.path.pop(0)
                 del greedy
 
         self.snake.insert(0, new_head)
@@ -102,3 +114,8 @@ class Snake:
 
     def set_score(self, score):
         self.score = score
+
+    def path_reset(self):
+        print(f"Path reset for {self.name}")
+        del self.path
+        self.path = []

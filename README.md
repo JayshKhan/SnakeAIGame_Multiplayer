@@ -13,7 +13,7 @@ snake for an added level of competition.
 - Multiplayer functionality: Play with your Enemy AI and see who can get the highest score!
 - AI Enemy: Compete against an AI-controlled snake that adds an extra layer of challenge to the game.
 - Settings: Change the game settings to your liking.
-- 
+
 
 ## Installation
 

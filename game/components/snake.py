@@ -65,6 +65,7 @@ class Snake:
                 new_head = self.path.pop(0)
             else:
                 print("Using A*")
+                self.path.clear()
                 astar = AStar(snake, food, self.obstacles)
                 path = astar.get_path()
                 if path == None:

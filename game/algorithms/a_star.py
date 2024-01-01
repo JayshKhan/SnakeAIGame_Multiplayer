@@ -23,6 +23,8 @@ class AStar:
         self.path = self.get_path()
 
     def get_path(self):
+        self.path = []
+        self.path.clear()
         self.open_set.append(self.snake_coords)
         self.g_score[self.snake_coords] = 0
         self.f_score[self.snake_coords] = self.heuristic(self.snake_coords)
